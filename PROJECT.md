@@ -46,11 +46,12 @@ real client.
 
 ## Current Status
 
-Part 1 manual (Setup, Docker, Configuration) complete through step 13:
-dependencies installed, `compose.yaml` written and PostgreSQL 17 running in
-Docker (`site_visit_log_db`, confirmed healthy), `.env`/`.env.example`
-populated, and `app/config.py` settings module written. `app/database.py` and
-`app/models.py` are still empty — steps 14–15 next, then Alembic (18–21).
+Part 1 manual (Setup, Docker, Configuration) complete through step 16:
+dependencies installed, PostgreSQL running in Docker, environment
+configuration and settings module written, and `app/database.py` +
+`app/models.py` written with the `Site`/`Visit` one-to-many relationship
+(reviewed, one indentation bug found and fixed, verified, pushed to git).
+Alembic (steps 18–21) is next.
 
 ## Folder Structure
 
@@ -147,12 +148,10 @@ site_visit_log_api/
 
 ## Next Steps
 
-- Write `app/database.py` (engine, `SessionLocal`, `Base`, `get_db()` — manual
-  step 14).
-- Define `Site` and `Visit` SQLAlchemy models with the one-to-many relationship
-  in `app/models.py` (step 15).
-- Initialise Alembic, connect it to the app, and generate/apply the first
-  migration (steps 18–21).
+- Initialise Alembic (`alembic init alembic`, step 18).
+- Connect Alembic to the app in `alembic/env.py` (step 19).
+- Generate and review the first migration (step 20).
+- Apply the migration and inspect the schema in `psql` (step 21).
 
 ## Session Protocol
 
@@ -177,3 +176,6 @@ At the end of a session:
   pydantic-settings, per manual).
 - 2026-07-11: Part 1 manual steps 1–13 completed — dependencies, Docker
   Compose PostgreSQL running, `.env` populated, settings module written.
+- 2026-07-11: Part 1 manual steps 14–16 completed — `app/database.py` and
+  `app/models.py` written; an indentation bug that nested `Visit` inside
+  `Site` was found in review, fixed, and re-verified. Pushed to git.
