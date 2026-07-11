@@ -46,8 +46,11 @@ real client.
 
 ## Current Status
 
-Project workspace created. No application code, `docker-compose.yml`, or Alembic
-config written yet — folder structure only, by design (see Decisions in Force).
+Part 1 manual (Setup, Docker, Configuration) complete through step 13:
+dependencies installed, `compose.yaml` written and PostgreSQL 17 running in
+Docker (`site_visit_log_db`, confirmed healthy), `.env`/`.env.example`
+populated, and `app/config.py` settings module written. `app/database.py` and
+`app/models.py` are still empty — steps 14–15 next, then Alembic (18–21).
 
 ## Folder Structure
 
@@ -140,11 +143,12 @@ site_visit_log_api/
 
 ## Next Steps
 
-- Write `requirements.txt` (fastapi, uvicorn, sqlalchemy, alembic, psycopg2-binary,
-  python-dotenv, pytest, httpx).
-- Write `docker-compose.yml` to run PostgreSQL locally.
-- Define `Site` and `Visit` SQLAlchemy models with the one-to-many relationship.
-- Initialise Alembic and create the first migration.
+- Write `app/database.py` (engine, `SessionLocal`, `Base`, `get_db()` — manual
+  step 14).
+- Define `Site` and `Visit` SQLAlchemy models with the one-to-many relationship
+  in `app/models.py` (step 15).
+- Initialise Alembic, connect it to the app, and generate/apply the first
+  migration (steps 18–21).
 
 ## Session Protocol
 
@@ -164,3 +168,8 @@ At the end of a session:
 ## Changelog
 
 - 2026-07-11: Project created.
+- 2026-07-11: Directory structure audited against Part 1 manual — confirmed
+  complete and matching. Dependency list corrected (psycopg[binary],
+  pydantic-settings, per manual).
+- 2026-07-11: Part 1 manual steps 1–13 completed — dependencies, Docker
+  Compose PostgreSQL running, `.env` populated, settings module written.

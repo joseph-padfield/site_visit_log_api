@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:17
+    container_name: site_visit_log_db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: site_visit_log
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - site_visit_log_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d site_visit_log"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  site_visit_log_data:
