@@ -140,6 +140,10 @@ site_visit_log_api/
 - 2026-07-11: Set up folder structure and project tracking only at this stage — no
   application code, `docker-compose.yml`, or Alembic config yet. Joseph will write
   these himself as the learning exercise.
+- 2026-07-11: Stop the Docker container (`docker compose down`) at the end of
+  each session and restart the venv + container fresh each time, rather than
+  leaving Postgres running continuously — deliberate practice of the command
+  sequence since it isn't yet muscle memory.
 
 ## Next Steps
 
