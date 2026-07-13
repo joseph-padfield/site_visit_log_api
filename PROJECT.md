@@ -1,6 +1,6 @@
 # Site Visit Log API
 
-Last Updated: 2026-07-11
+Last Updated: 2026-07-13
 
 ## Purpose
 
@@ -46,12 +46,13 @@ real client.
 
 ## Current Status
 
-Part 1 manual (Setup, Docker, Configuration) complete through step 16:
-dependencies installed, PostgreSQL running in Docker, environment
-configuration and settings module written, and `app/database.py` +
-`app/models.py` written with the `Site`/`Visit` one-to-many relationship
-(reviewed, one indentation bug found and fixed, verified, pushed to git).
-Alembic (steps 18–21) is next.
+Part 1 manual (Setup, Docker, Configuration, Database, Alembic) is fully
+complete through step 21: dependencies installed, PostgreSQL running in
+Docker, environment configuration and settings module written,
+`app/database.py` + `app/models.py` written and verified, and Alembic
+initialised, wired to the app, and used to generate and apply the first
+migration — schema verified directly in `psql` against the models.
+Endpoint implementation is next.
 
 ## Folder Structure
 
@@ -148,10 +149,10 @@ site_visit_log_api/
 
 ## Next Steps
 
-- Initialise Alembic (`alembic init alembic`, step 18).
-- Connect Alembic to the app in `alembic/env.py` (step 19).
-- Generate and review the first migration (step 20).
-- Apply the migration and inspect the schema in `psql` (step 21).
+- Implement `POST /sites/`, `GET /sites/`, `GET /sites/{site_id}`.
+- Implement `POST /sites/{site_id}/visits/`, `GET /sites/{site_id}/visits/`.
+- Implement `GET /visits/` with `?since=` filter.
+- Write tests for all endpoints.
 
 ## Session Protocol
 
@@ -179,3 +180,9 @@ At the end of a session:
 - 2026-07-11: Part 1 manual steps 14–16 completed — `app/database.py` and
   `app/models.py` written; an indentation bug that nested `Visit` inside
   `Site` was found in review, fixed, and re-verified. Pushed to git.
+- 2026-07-13: Part 1 manual steps 18–21 completed — Alembic initialised and
+  wired to the app (`sqlalchemy.url` from settings, `target_metadata` from
+  `Base.metadata`), first migration generated and reviewed (after
+  regenerating once to fix an empty `-m` message), applied with
+  `alembic upgrade head`, and schema verified in `psql`. Part 1 is now fully
+  complete.
