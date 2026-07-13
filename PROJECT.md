@@ -1,6 +1,6 @@
 # Site Visit Log API
 
-Last Updated: 2026-07-13
+Last Updated: 2026-07-13 (session 6)
 
 ## Purpose
 
@@ -46,13 +46,13 @@ real client.
 
 ## Current Status
 
-Part 1 manual (Setup, Docker, Configuration, Database, Alembic) is fully
-complete through step 21: dependencies installed, PostgreSQL running in
-Docker, environment configuration and settings module written,
-`app/database.py` + `app/models.py` written and verified, and Alembic
-initialised, wired to the app, and used to generate and apply the first
-migration — schema verified directly in `psql` against the models.
-Endpoint implementation is next.
+Part 1 (Setup, Docker, Configuration, Database, Alembic) is complete, and
+`README.md` documents it in full. Part 2 (endpoints) is under way: `POST
+/sites/`, `GET /sites/`, and `GET /sites/{site_id}` are implemented in
+`app/main.py` with `SiteCreate`/`SiteResponse` schemas in `app/schemas.py`
+(`VisitCreate`/`VisitResponse` written ahead), manually tested, committed,
+and pushed. No automated tests yet — `tests/test_sites.py` is still empty.
+Visit endpoints are next.
 
 ## Folder Structure
 
@@ -149,10 +149,9 @@ site_visit_log_api/
 
 ## Next Steps
 
-- Implement `POST /sites/`, `GET /sites/`, `GET /sites/{site_id}`.
 - Implement `POST /sites/{site_id}/visits/`, `GET /sites/{site_id}/visits/`.
 - Implement `GET /visits/` with `?since=` filter.
-- Write tests for all endpoints.
+- Write automated tests for the site endpoints, then the visit endpoints.
 
 ## Session Protocol
 
@@ -186,3 +185,7 @@ At the end of a session:
   regenerating once to fix an empty `-m` message), applied with
   `alembic upgrade head`, and schema verified in `psql`. Part 1 is now fully
   complete.
+- 2026-07-13: `README.md` written, covering Part 1 end to end.
+- 2026-07-13: First endpoints implemented — `POST /sites/`, `GET /sites/`,
+  `GET /sites/{site_id}` in `app/main.py`, with schemas in `app/schemas.py`.
+  Manually tested, committed, pushed.

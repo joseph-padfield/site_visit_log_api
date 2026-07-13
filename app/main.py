@@ -74,7 +74,7 @@ def read_sites(
 )
 def read_site(
     site_id: int,
-    db = Depends(get_db)
+    db: Session = Depends(get_db)
 ):
     site = db.get(models.Site, site_id)
 
@@ -85,3 +85,60 @@ def read_site(
         )
     
     return site
+
+@app.post(
+    "/sites/{site_id}/visits/",
+    response_model=schemas.VisitResponse,
+    status_code=status.HTTP_201_CREATED
+)
+def create_visit(
+    site_id: int,
+    visit_data: schemas.VisitCreate,
+    db: Session = Depends(get_db)
+):
+    site = db.get(models.Site, site_id)
+
+    if site is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Site not found."
+        )
+    
+    visit = models.Visit(
+        site_id=site_id,
+        visit_date=visit_data.visit_date,
+        purpose=visit_data.purpose,
+        weather=visit_data.weather,
+        notes=visit_data.notes
+    )
+
+    db.add(visit)
+    db.commit()
+    db.refresh(visit)
+
+    return visit
+
+
+@app.get(
+    "/sites/{site_id}/visits/",
+    response_model=list[schemas.VisitResponse]
+)
+def read_site_visits(
+    site_id: int,
+    db: Session = Depends(get_db)
+):
+    site = db.get(models.Site, site_id)
+
+    if site is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Site not found."
+        )
+    
+    statement = (
+        select(models.Visit)
+        .where(models.Visit.site_id == site_id)
+        .order_by(models.Visit.visit_date.desc())
+    )
+
+    return db.scalars(statement).all()

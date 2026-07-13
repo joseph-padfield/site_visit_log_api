@@ -43,7 +43,7 @@ class VisitCreate(BaseModel):
         max_length=200
     )
 
-    weather: str = Field(
+    weather: str | None = Field(
         default=None,
         max_length=100
     )
