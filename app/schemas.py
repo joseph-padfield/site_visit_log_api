@@ -50,6 +50,8 @@ class VisitCreate(BaseModel):
 
     notes: str | None = None
 
+    follow_up_required: bool = False
+
 
 class VisitResponse(BaseModel):
     id: int
@@ -58,6 +60,7 @@ class VisitResponse(BaseModel):
     purpose: str
     weather: str | None
     notes: str | None
+    follow_up_required: bool
 
     model_config = ConfigDict(
         from_attributes=True

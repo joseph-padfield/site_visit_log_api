@@ -109,7 +109,8 @@ def create_visit(
         visit_date=visit_data.visit_date,
         purpose=visit_data.purpose,
         weather=visit_data.weather,
-        notes=visit_data.notes
+        notes=visit_data.notes,
+        follow_up_required=visit_data.follow_up_required
     )
 
     db.add(visit)

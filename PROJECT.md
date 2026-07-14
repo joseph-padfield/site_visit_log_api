@@ -1,6 +1,6 @@
 # Site Visit Log API
 
-Last Updated: 2026-07-13 (session 7)
+Last Updated: 2026-07-14 (session 8)
 
 ## Purpose
 
@@ -47,15 +47,16 @@ real client.
 ## Current Status
 
 Part 1 (Setup, Docker, Configuration, Database, Alembic) is complete, and
-`README.md` documents it in full. Part 2 is complete through step 11: all
-three site routes and the two nested visit routes (`POST`/`GET
-/sites/{site_id}/visits/`) are implemented in `app/main.py`, with schemas in
-`app/schemas.py`. Reviewed against the Part 2 manual with no outstanding
-discrepancies — two bugs found and fixed (`VisitCreate.weather` mistyped as
-`str` instead of `str | None`; `read_site` missing a `Session` type hint).
-No automated tests yet — `tests/test_sites.py` is still empty. Steps 12–15
-(flat `/visits/` filter, `psql` join inspection, `follow_up_required`
-migration) are next.
+`README.md` documents it in full. Part 2 (Models, Migrations, Schemas and
+API Routes) is functionally complete through step 15: all site and visit
+routes are implemented, including the flat `/visits/?since=` filter and
+`follow_up_required` (added via a second Alembic migration and wired into
+the schemas/route). Reviewed against the Part 2 manual with no functional
+bugs found this session. Two items are unconfirmed rather than assumed
+done, since they can't be checked from this environment (no Docker/psql
+access): that the second migration was actually applied to the running
+database, and that the step 13 `psql` join query was run. No automated
+tests yet — `tests/test_sites.py` is still empty.
 
 ## Folder Structure
 
@@ -152,11 +153,11 @@ site_visit_log_api/
 
 ## Next Steps
 
-- Implement `GET /visits/` with `?since=` filter (Part 2 step 12).
-- Inspect the `Site`/`Visit` join directly in `psql` (Part 2 step 13).
-- Add `follow_up_required` to `Visit` via a second migration, then wire it
-  into the schemas and create-visit route (Part 2 steps 14–15).
+- Confirm the second migration is applied to the running database
+  (`alembic current` should show `12cf2f2f3a70 (head)`) and that the step
+  13 `psql` join check was run.
 - Write automated tests for the site endpoints, then the visit endpoints.
+- Start Part 3 (Testing, Review and Completion Criteria).
 
 ## Session Protocol
 
@@ -199,3 +200,8 @@ At the end of a session:
   review and fixed: `VisitCreate.weather` mistyped as `str` instead of
   `str | None`, and a missing `Session` type hint in `read_site`. Committed,
   pushed.
+- 2026-07-14: Part 2 steps 12, 14, and 15 completed — flat `/visits/?since=`
+  filter, `follow_up_required` added to `Visit` via a second Alembic
+  migration, and the field wired into the schemas and create-visit route.
+  Reviewed against the Part 2 manual; no functional bugs found. Committed
+  and pushed as two commits.

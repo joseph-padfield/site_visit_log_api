@@ -3,12 +3,14 @@ from __future__ import annotations
 from datetime import date, datetime
 
 from sqlalchemy import (
+    Boolean,
     Date,
     DateTime,
     ForeignKey,
     String,
     Text,
-    func,
+    false,
+    func
 )
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -89,4 +91,10 @@ class Visit(Base):
 
     site: Mapped[Site] = relationship(
         back_populates="visits"
+    )
+
+    follow_up_required: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        server_default=false()
     )
