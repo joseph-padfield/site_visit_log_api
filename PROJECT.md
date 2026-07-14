@@ -1,6 +1,6 @@
 # Site Visit Log API
 
-Last Updated: 2026-07-13 (session 6)
+Last Updated: 2026-07-13 (session 7)
 
 ## Purpose
 
@@ -47,12 +47,15 @@ real client.
 ## Current Status
 
 Part 1 (Setup, Docker, Configuration, Database, Alembic) is complete, and
-`README.md` documents it in full. Part 2 (endpoints) is under way: `POST
-/sites/`, `GET /sites/`, and `GET /sites/{site_id}` are implemented in
-`app/main.py` with `SiteCreate`/`SiteResponse` schemas in `app/schemas.py`
-(`VisitCreate`/`VisitResponse` written ahead), manually tested, committed,
-and pushed. No automated tests yet — `tests/test_sites.py` is still empty.
-Visit endpoints are next.
+`README.md` documents it in full. Part 2 is complete through step 11: all
+three site routes and the two nested visit routes (`POST`/`GET
+/sites/{site_id}/visits/`) are implemented in `app/main.py`, with schemas in
+`app/schemas.py`. Reviewed against the Part 2 manual with no outstanding
+discrepancies — two bugs found and fixed (`VisitCreate.weather` mistyped as
+`str` instead of `str | None`; `read_site` missing a `Session` type hint).
+No automated tests yet — `tests/test_sites.py` is still empty. Steps 12–15
+(flat `/visits/` filter, `psql` join inspection, `follow_up_required`
+migration) are next.
 
 ## Folder Structure
 
@@ -149,8 +152,10 @@ site_visit_log_api/
 
 ## Next Steps
 
-- Implement `POST /sites/{site_id}/visits/`, `GET /sites/{site_id}/visits/`.
-- Implement `GET /visits/` with `?since=` filter.
+- Implement `GET /visits/` with `?since=` filter (Part 2 step 12).
+- Inspect the `Site`/`Visit` join directly in `psql` (Part 2 step 13).
+- Add `follow_up_required` to `Visit` via a second migration, then wire it
+  into the schemas and create-visit route (Part 2 steps 14–15).
 - Write automated tests for the site endpoints, then the visit endpoints.
 
 ## Session Protocol
@@ -189,3 +194,8 @@ At the end of a session:
 - 2026-07-13: First endpoints implemented — `POST /sites/`, `GET /sites/`,
   `GET /sites/{site_id}` in `app/main.py`, with schemas in `app/schemas.py`.
   Manually tested, committed, pushed.
+- 2026-07-13: Part 2 step 11 completed — nested visit routes (`POST`/`GET
+  /sites/{site_id}/visits/`) added to `app/main.py`. Two bugs found in
+  review and fixed: `VisitCreate.weather` mistyped as `str` instead of
+  `str | None`, and a missing `Session` type hint in `read_site`. Committed,
+  pushed.

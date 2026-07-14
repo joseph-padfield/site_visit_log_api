@@ -142,3 +142,25 @@ def read_site_visits(
     )
 
     return db.scalars(statement).all()
+
+
+@app.get(
+    "/visits/",
+    response_model=list[schemas.VisitResponse]
+)
+def read_visits(
+    since: date | None = Query(default=None),
+    db: Session = Depends(get_db)
+):
+    statement = select(models.Visit)
+
+    if since is not None:
+        statement = statement.where(
+            models.Visit.visit_date >= since
+        )
+
+    statement = statement.order_by(
+        models.Visit.visit_date.desc()
+    )
+
+    return db.scalars(statement).all()
