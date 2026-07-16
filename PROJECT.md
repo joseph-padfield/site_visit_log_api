@@ -46,17 +46,13 @@ real client.
 
 ## Current Status
 
-Part 1 (Setup, Docker, Configuration, Database, Alembic) is complete, and
-`README.md` documents it in full. Part 2 (Models, Migrations, Schemas and
-API Routes) is functionally complete through step 15: all site and visit
-routes are implemented, including the flat `/visits/?since=` filter and
-`follow_up_required` (added via a second Alembic migration and wired into
-the schemas/route). Reviewed against the Part 2 manual with no functional
-bugs found this session. Two items are unconfirmed rather than assumed
-done, since they can't be checked from this environment (no Docker/psql
-access): that the second migration was actually applied to the running
-database, and that the step 13 `psql` join query was run. No automated
-tests yet — `tests/test_sites.py` is still empty.
+Part 1 (Setup, Docker, Configuration, Database, Alembic) and Part 2
+(Models, Migrations, Schemas and API Routes) are both fully complete
+(Part 2 steps 1–15), reviewed against the manuals with no outstanding
+issues. Confirmed: the second migration is applied (`alembic current` →
+`12cf2f2f3a70 (head)`) and the step 13 `psql` join query was run. No
+automated tests yet — `tests/test_sites.py` is still empty. Part 3
+(Testing, Review and Completion Criteria) is next.
 
 ## Folder Structure
 
@@ -153,9 +149,6 @@ site_visit_log_api/
 
 ## Next Steps
 
-- Confirm the second migration is applied to the running database
-  (`alembic current` should show `12cf2f2f3a70 (head)`) and that the step
-  13 `psql` join check was run.
 - Write automated tests for the site endpoints, then the visit endpoints.
 - Start Part 3 (Testing, Review and Completion Criteria).
 
@@ -205,3 +198,6 @@ At the end of a session:
   migration, and the field wired into the schemas and create-visit route.
   Reviewed against the Part 2 manual; no functional bugs found. Committed
   and pushed as two commits.
+- 2026-07-14: Confirmed the second migration is applied to the running
+  database and the step 13 `psql` join check was run. Part 2 is now fully
+  complete.
