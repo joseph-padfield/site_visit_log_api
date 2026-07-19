@@ -45,3 +45,30 @@ def clean_database() -> Generator[None, None, None]:
             )
         )
         
+
+@pytest.fixture
+def db_session() -> Generator[Session, None]:
+    db = TestingSessionLocal()
+
+    try:
+        yield db
+    finally:
+        db.close()
+
+@pytest.fixture
+def client() -> Generator[TestClient, None, None]:
+    def override_get_db():
+        db = TestingSessionLocal()
+
+        try:
+            yield db
+        finally:
+            db.close()
+
+    app.dependency_overrides[get_db] = override_get_db
+
+    with TestClient(app) as test_client:
+        yield test_client
+
+    app.dependency_overrides.clear()
+    
