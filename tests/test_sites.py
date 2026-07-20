@@ -21,3 +21,15 @@ def test_create_site(client: TestClient):
     assert data["site_type"] == "listed building"
     assert data["notes"] == "Victorian parish church."
     assert "created_at" in data
+
+def test_unknown_site_returns_404(
+        client: TestClient
+        ):
+    response = client.get("/sites/9999")
+
+    assert response.status_code == 404
+
+    assert response.json() == {
+        "detail": "Site not found."
+    }
+    

@@ -1,6 +1,6 @@
 # Site Visit Log API
 
-Last Updated: 2026-07-14 (session 8)
+Last Updated: 2026-07-20 (session 10)
 
 ## Purpose
 
@@ -46,13 +46,22 @@ real client.
 
 ## Current Status
 
-Part 1 (Setup, Docker, Configuration, Database, Alembic) and Part 2
-(Models, Migrations, Schemas and API Routes) are both fully complete
-(Part 2 steps 1–15), reviewed against the manuals with no outstanding
-issues. Confirmed: the second migration is applied (`alembic current` →
-`12cf2f2f3a70 (head)`) and the step 13 `psql` join query was run. No
-automated tests yet — `tests/test_sites.py` is still empty. Part 3
-(Testing, Review and Completion Criteria) is next.
+All three parts are complete. Part 1, Part 2, and Part 3 (steps 1–10)
+were audited file-by-file against their Notion manuals on 2026-07-20 —
+`compose.yaml`, `config.py`, `database.py`, `models.py`, both Alembic
+migrations, `alembic/env.py`, `schemas.py`, `main.py`, and the full
+`tests/` suite (`conftest.py`, `test_sites.py`, `test_visits.py`) all
+match. One real (but harmless) bug was found and fixed: the leading
+slash was missing in `test_unknown_site_returns_404`'s
+`client.get("sites/9999")` — verified empirically that httpx 0.28.1
+resolves it identically either way, so the test was passing regardless,
+but it's now consistent with the rest of the suite. `README.md` has been
+rewritten to reflect the finished project (all seven endpoints, the test
+suite, `follow_up_required`). Not independently verifiable from the
+session sandbox (no Docker/Postgres access there): that the full
+`pytest` suite actually passes locally, and that data survives a
+container restart — both are Part 3 step 14 final-check items for
+Joseph to confirm.
 
 ## Folder Structure
 
@@ -149,8 +158,13 @@ site_visit_log_api/
 
 ## Next Steps
 
-- Write automated tests for the site endpoints, then the visit endpoints.
-- Start Part 3 (Testing, Review and Completion Criteria).
+- Run `pytest -v` locally and confirm the full suite passes.
+- Confirm data survives a `docker compose down` / `up -d` restart (Part 3
+  step 14).
+- Commit the outstanding changes (`README.md`, `PROJECT.md`,
+  `tests/test_sites.py`, `tests/test_visits.py`).
+- Project otherwise complete — no further planned work unless new
+  requirements arise.
 
 ## Session Protocol
 
@@ -201,3 +215,29 @@ At the end of a session:
 - 2026-07-14: Confirmed the second migration is applied to the running
   database and the step 13 `psql` join check was run. Part 2 is now fully
   complete.
+- 2026-07-16: Part 3 steps 1–4 completed — test database created,
+  migrations applied to it, and `tests/conftest.py` fixtures
+  (`clean_database`, `db_session`, `client`) written, matching the manual.
+- 2026-07-19: Part 3 step 5 completed — fixed a test function typo
+  (`tesst_create_site`) and a fixture name/type mismatch, getting
+  `test_create_site` passing. Cleaned up `requirements.txt` after a
+  `pip freeze` run outside the venv pulled in ~25 unrelated packages;
+  re-added `httpx2` and its genuine transitive deps (`httpcore2`,
+  `truststore`).
+- 2026-07-20: Status corrected against the Notion Part 3 manual — Part 3
+  was already under way (steps 1–5 done), not unstarted as the previous
+  Current Status implied. Trackers updated to match.
+- 2026-07-20: Part 3 steps 6–10 completed — `test_unknown_site_returns_404`
+  and the full `tests/test_visits.py` (helper, nested visit creation,
+  unknown-parent 404, `since` filter) written and reviewed against the
+  manual. Fixed a real-but-harmless missing-leading-slash bug in
+  `test_unknown_site_returns_404` (`client.get("sites/9999")` →
+  `"/sites/9999"`), confirmed via a standalone httpx URL-join check that
+  both forms resolved identically, so the test was never actually broken.
+- 2026-07-20: Full project audit against all three Notion manuals —
+  every file compared line-by-line against its manual section. Part 1
+  and Part 2 confirmed complete with no functional issues. `README.md`
+  rewritten from its Part-1-era draft (still described visit endpoints
+  and tests as "not yet implemented") to reflect the finished project.
+  Project judged complete pending Joseph's own local `pytest` run and
+  container-restart check.
